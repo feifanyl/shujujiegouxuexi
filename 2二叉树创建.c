@@ -167,3 +167,4 @@ int main(void){
     PreOrderTraverse(p);
     tongji(p);
 }
+
