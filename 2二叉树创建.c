@@ -14,7 +14,7 @@ void CreateTree(tree **p){
     scanf("%c",&info);
     getchar();//用于接收scanf后的回车字符
     (*p)->data=info;
-    printf("是否创建%c左孩子?",(*p)->data);
+    printf("是否创建%c左孩子(Y or n)?",(*p)->data);
     scanf("%c",&check);
     getchar();
     if(check=='Y'){
@@ -22,7 +22,7 @@ void CreateTree(tree **p){
     } else{
         (*p)->lchild=NULL;
     }
-    printf("是否创建%c右孩子?",(*p)->data);
+    printf("是否创建%c右孩子?(Y or n)",(*p)->data);
     scanf("%c",&check);
     getchar();
     if(check=='Y'){
@@ -33,11 +33,11 @@ void CreateTree(tree **p){
 }
 /*----公共部分---*/
 int top=-1;
-//前序遍历使用的进栈函数
+//进栈函数
 void push(tree** a,tree* elem){
     a[++top]=elem;
 }
-//弹栈函数
+//出栈函数
 void pop( ){
     if (top==-1) {
         return ;
@@ -108,6 +108,51 @@ void PostOrderTraverse1(tree* T){
     return;
 }
 /*------后序遍历------*/
+/*---交换左右子树---*/
+void changeLR(tree* root){
+    //请在此处填写代码， 完成二叉树左右子树互换
+    if(root->lchild==NULL&&root->rchild==NULL){
+        return;
+    }else{
+        tree* temp=root->lchild;
+        root->lchild=root->rchild;
+        root->rchild=temp;
+    }
+    if(root->lchild){
+        changeLR(root->lchild);
+    }
+    if(root->rchild){
+        changeLR(root->rchild);
+    }
+}
+/*---交换左右子树---*/
+
+/*---统计叶子结点个数---*/
+
+void tongji(tree* Tree){
+    tree* a[20];//定义一个顺序栈
+    tree * p;//临时指针
+    push(a, Tree);
+    int num=0;
+    while (top!=-1) {
+        p=getTop(a);//取栈顶元素
+        pop();//弹栈
+        while (p) {
+            if(p->lchild==NULL&&p->rchild==NULL){
+                num++;
+            }
+            //如果该结点有右孩子，右孩子进栈
+            if (p->rchild) {
+                push(a,p->rchild);
+            }
+            p=p->lchild;//一直指向根结点最后一个左孩子
+        }
+    }
+    printf("\n叶子结点为%d",num);
+}
+
+/*---统计叶子结点个数---*/
+
 int main(void){
     tree *p;
     CreateTree(&p);
@@ -117,4 +162,8 @@ int main(void){
     InOrderTraverse1(p);
     printf("\n后序遍历：");
     PostOrderTraverse1(p);
+    printf("\n交换左右子树并且以先序遍历查看：");
+    changeLR(p);
+    PreOrderTraverse(p);
+    tongji(p);
 }
